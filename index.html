@@ -679,7 +679,7 @@ body {
     // Hide genie after 3 seconds
     setTimeout(() => {
       genie.style.display = 'none';
-    }, 3000);
+    }, 4000);
 
     // Hide wish button after use
     wishBtn.style.display = 'none';
@@ -697,7 +697,7 @@ body {
     cursor.style.top = `${e.clientY}px`;
 
     // Sparkle effect (💖) — smaller & less frequent
-    if (Math.random() < 0.06) {
+    if (Math.random() < 0.08) {
       const sparkle = document.createElement("div");
       sparkle.className = "sparkle";
       sparkle.innerText = "💖";
