@@ -709,6 +709,159 @@ body {
     }
   });
 </script>
+  <!-- 🎂 Cut the Cake Button -->
+<button class="cut-cake-btn" onclick="showCake()">🎂 Cut the Cake</button>
+
+<!-- 🎂 Cake Display -->
+<div id="cake-container">
+  <img src="cake.png" alt="Birthday Cake" class="cake-img" />
+  <canvas id="confetti"></canvas>
+</div>
+
+<style>
+  /* 🎂 Button Styling (matches your existing buttons) */
+  .cut-cake-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 8px 16px;
+    font-size: 14px;
+    background: transparent;
+    border: 2px solid #ff69b4;
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 0 6px #ff69b4;
+    transition: 0.3s ease;
+    font-family: inherit;
+  }
+
+  .cut-cake-btn:hover {
+    background-color: #ff69b4;
+    color: white;
+  }
+
+  /* 🎂 Cake Container Styling */
+  #cake-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 9999;
+    animation: fadeIn 0.5s ease-out forwards;
+    pointer-events: none;
+    text-align: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8) translate(-50%, -50%); }
+    to { opacity: 1; transform: scale(1) translate(-50%, -50%); }
+  }
+
+  /* 🖼️ Cake Image Styling */
+  .cake-img {
+    width: 220px;
+    max-width: 80vw;
+    height: auto;
+    animation: bounce 2s ease-in-out infinite, glow 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px #ff69b4);
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.05) translateY(-10px); }
+  }
+
+  @keyframes glow {
+    0% { filter: drop-shadow(0 0 10px #ff69b4); }
+    50% { filter: drop-shadow(0 0 20px #ff69b4); }
+    100% { filter: drop-shadow(0 0 10px #ff69b4); }
+  }
+
+  /* 🎉 Confetti Canvas */
+  #confetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 8888;
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  let cakeVisible = false;
+
+  function showCake() {
+    const cakeContainer = document.getElementById('cake-container');
+    const confettiCanvas = document.getElementById('confetti');
+
+    if (!cakeVisible) {
+      cakeContainer.style.display = 'block';
+      cakeVisible = true;
+      launchConfetti();
+
+      setTimeout(() => {
+        cakeContainer.style.display = 'none';
+        cakeVisible = false;
+      }, 5000); // Hide after 5s
+    }
+  }
+
+  function launchConfetti() {
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const confetti = [];
+    for (let i = 0; i < 100; i++) {
+      confetti.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 10 + 5,
+        color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+        tilt: Math.random() * 10 - 10,
+        tiltAngleIncremental: Math.random() * 0.07 + 0.05,
+        tiltAngle: 0,
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach((c) => {
+        ctx.beginPath();
+        ctx.lineWidth = c.r;
+        ctx.strokeStyle = c.color;
+        ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+        ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 2);
+        ctx.stroke();
+      });
+      update();
+    }
+
+    function update() {
+      confetti.forEach((c) => {
+        c.tiltAngle += c.tiltAngleIncremental;
+        c.y += (Math.cos(c.d) + 3 + c.r / 2) / 2;
+        c.x += Math.sin(c.d);
+        c.tilt = Math.sin(c.tiltAngle) * 15;
+      });
+    }
+
+    let frames = 0;
+    function loop() {
+      draw();
+      frames++;
+      if (frames < 150) requestAnimationFrame(loop); // Run for ~2.5s
+    }
+
+    loop();
+  }
+</script>
+
 
 </body>
 </html>
