@@ -528,7 +528,17 @@ runAsync().start();
 <!-- 📜 Toggle Sidebar Script -->
 <script>
   function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
+    const sidebar = document.getElementById('sidebar');
+    const profileBtn = document.querySelector('.profile-btn'); // 🆕 get the profile button
+
+    sidebar.classList.toggle('open');
+
+    // 🆕 hide profile button if sidebar is open, else show it
+    if (sidebar.classList.contains('open')) {
+      profileBtn.style.display = 'none'; // 🆕 hide on open
+    } else {
+      profileBtn.style.display = 'flex'; // 🆕 show on close
+    }
   }
 </script>
 
